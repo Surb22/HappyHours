@@ -22,7 +22,9 @@
     .hero-eyebrow { font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); margin-bottom:18px; }
     .hero h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(52px,7vw,88px); font-weight:300; line-height:1.0; margin-bottom:12px; }
     .hero-by { font-size:13px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); margin-bottom:14px; margin-top:6px; }
-    .hero-tagline { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:22px; color:var(--mid); }
+    .hero-tagline { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:22px; color:var(--mid); margin-bottom:24px; }
+    .hero-about p { font-size:14px; color:var(--mid); line-height:1.8; margin-bottom:12px; }
+    .hero-about p:last-child { margin-bottom:0; }
     .hero-img { width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:2px; box-shadow:0 4px 24px rgba(0,0,0,0.10); }
 
     .filter-bar { padding:40px 48px 0; display:flex; gap:10px; flex-wrap:wrap; }
@@ -40,11 +42,11 @@
     .card-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:400; margin-bottom:6px; }
     .card-desc { font-size:13px; color:var(--mid); line-height:1.6; }
 
-    .about-section { padding:64px 48px 40px; max-width:680px; }
+
+    .about-section { padding:72px 48px; border-top:1px solid var(--rule); max-width:680px; }
     .section-eyebrow { font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); margin-bottom:20px; }
     .about-section p { color:var(--mid); margin-bottom:18px; font-size:15px; line-height:1.9; }
     .about-section p:last-child { margin-bottom:0; }
-
     .contact-section { padding:64px 48px; border-top:1px solid var(--rule); text-align:center; }
     .contact-section h2 { font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:300; margin-bottom:12px; }
     .contact-section p { color:var(--mid); margin-bottom:32px; font-size:15px; }
@@ -90,15 +92,13 @@
     <h1>Happy<br/>Hours</h1>
     <p class="hero-by">by Surbhi</p>
     <p class="hero-tagline">Clocked out, happily lost.</p>
+    <div class="hero-about">
+      <p>I&#39;m Surbhi, and this is where I come to forget everything else and just make things &#8212; differently, every single time.</p>
+      <p>Happy Hours is not a portfolio of a professional artist. It&#39;s a collection &#8212; of experiments, of free evenings, of &#8220;what if I try this differently&#8221; moments. Just a love for art and craft and the freedom to go as crazy as I want with it.</p>
+      <p>This isn&#39;t perfect and I never wanted it to be. Made in the moments I love most. No rules. No masters. Just happy hours.</p>
+    </div>
   </div>
   <img class="hero-img" src="images/radha-krishna.jpeg" alt="Radha Krishna" />
-</section>
-
-<section class="about-section" id="about">
-  <div class="section-eyebrow">About</div>
-  <p>I&#39;m Surbhi, and this is where I come to forget everything else and just make things &#8212; differently, every single time.</p>
-  <p>Happy Hours is not a portfolio of a professional artist. It&#39;s a collection &#8212; of experiments, of free evenings, of &#8220;what if I try this differently&#8221; moments. Just a love for art and craft and the freedom to go as crazy as I want with it.</p>
-  <p>This isn&#39;t perfect and I never wanted it to be. Made in the moments I love most. No rules. No masters. Just happy hours.</p>
 </section>
 
 <div class="filter-bar">
@@ -218,6 +218,13 @@
       </div>
     </div>
   </div>
+</section>
+
+<section class="about-section" id="about">
+  <div class="section-eyebrow">About</div>
+  <p>I&#39;m Surbhi, and this is where I come to forget everything else and just make things &#8212; differently, every single time.</p>
+  <p>Happy Hours is not a portfolio of a professional artist. It&#39;s a collection &#8212; of experiments, of free evenings, of &#8220;what if I try this differently&#8221; moments. Just a love for art and craft and the freedom to go as crazy as I want with it.</p>
+  <p>This isn&#39;t perfect and I never wanted it to be. Made in the moments I love most. No rules. No masters. Just happy hours.</p>
 </section>
 
 <section class="contact-section" id="contact">
