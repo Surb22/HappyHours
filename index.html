@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Hours by Surbhi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Inter:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #FDFCF8; --ink: #1A1A18; --mid: #6E6B62;
+      --accent: #C4956A; --rule: #E6E2DA; --card-bg: #FFFFFF;
+    }
+    body { background:var(--bg); color:var(--ink); font-family:'Inter',sans-serif; font-weight:300; font-size:14px; line-height:1.7; -webkit-font-smoothing:antialiased; }
+
+    nav { display:flex; justify-content:flex-end; align-items:center; padding:24px 48px; border-bottom:1px solid var(--rule); position:sticky; top:0; background:var(--bg); z-index:100; }
+    .nav-links { display:flex; gap:32px; list-style:none; }
+    .nav-links a { color:var(--mid); text-decoration:none; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; transition:color 0.2s; }
+    .nav-links a:hover { color:var(--ink); }
+
+    .hero { padding:80px 48px 64px; display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; border-bottom:1px solid var(--rule); }
+    .hero-eyebrow { font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); margin-bottom:18px; }
+    .hero h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(52px,7vw,88px); font-weight:300; line-height:1.0; margin-bottom:12px; }
+    .hero-by { font-size:13px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); margin-bottom:14px; margin-top:6px; }
+    .hero-tagline { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:22px; color:var(--mid); }
+    .hero-img { width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:2px; box-shadow:0 4px 24px rgba(0,0,0,0.10); }
+
+    .filter-bar { padding:40px 48px 0; display:flex; gap:10px; flex-wrap:wrap; }
+    .filter-btn { padding:8px 18px; border:1px solid var(--rule); background:none; color:var(--mid); font-family:'Inter',sans-serif; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; border-radius:2px; transition:all 0.2s; }
+    .filter-btn:hover, .filter-btn.active { background:var(--ink); color:var(--bg); border-color:var(--ink); }
+
+    .gallery-section { padding:32px 48px 80px; }
+    .gallery-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:24px; }
+    .card { background:var(--card-bg); border-radius:3px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.07); transition:transform 0.3s,box-shadow 0.3s; cursor:pointer; }
+    .card:hover { transform:translateY(-5px); box-shadow:0 10px 28px rgba(0,0,0,0.12); }
+    .card.hidden { display:none; }
+    .card-img { width:100%; aspect-ratio:4/3; object-fit:cover; display:block; }
+    .card-meta { padding:16px 20px 20px; }
+    .card-category { font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
+    .card-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:400; margin-bottom:6px; }
+    .card-desc { font-size:13px; color:var(--mid); line-height:1.6; }
+
+    .about-section { padding:64px 48px 40px; max-width:680px; }
+    .section-eyebrow { font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); margin-bottom:20px; }
+    .about-section p { color:var(--mid); margin-bottom:18px; font-size:15px; line-height:1.9; }
+    .about-section p:last-child { margin-bottom:0; }
+
+    .contact-section { padding:64px 48px; border-top:1px solid var(--rule); text-align:center; }
+    .contact-section h2 { font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:300; margin-bottom:12px; }
+    .contact-section p { color:var(--mid); margin-bottom:32px; font-size:15px; }
+    .btn { display:inline-block; padding:12px 36px; border:1px solid var(--ink); color:var(--ink); text-decoration:none; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; transition:background 0.2s,color 0.2s; }
+    .btn:hover { background:var(--ink); color:var(--bg); }
+
+    footer { padding:24px 48px; border-top:1px solid var(--rule); display:flex; justify-content:space-between; font-size:12px; color:var(--mid); }
+
+    .lightbox { display:none; position:fixed; inset:0; background:rgba(20,20,18,0.94); z-index:1000; align-items:center; justify-content:center; padding:32px; }
+    .lightbox.open { display:flex; }
+    .lb-inner { display:flex; gap:40px; align-items:flex-start; max-width:1100px; width:100%; }
+    .lb-img-wrap { flex:1; }
+    .lb-img-wrap img { max-height:82vh; max-width:100%; object-fit:contain; display:block; border-radius:2px; }
+    .lb-close { position:fixed; top:24px; right:32px; background:none; border:none; color:rgba(255,255,255,0.7); font-size:32px; cursor:pointer; line-height:1; transition:color 0.2s; }
+    .lb-close:hover { color:#fff; }
+    .lb-info { width:220px; color:#fff; padding-top:8px; flex-shrink:0; }
+    .lb-cat { font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); margin-bottom:10px; }
+    .lb-title { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; line-height:1.2; }
+
+    @media (max-width:768px) {
+      nav { padding:18px 20px; } .nav-links { display:none; }
+      .hero { grid-template-columns:1fr; padding:48px 20px 40px; gap:32px; }
+      .filter-bar { padding:28px 20px 0; }
+      .gallery-section { padding:24px 20px 60px; }
+      .gallery-grid { grid-template-columns:1fr 1fr; gap:12px; }
+      .about-section, .contact-section, footer { padding:48px 20px; }
+      .lb-info { display:none; } .lightbox { padding:16px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <ul class="nav-links">
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <h1>Happy<br/>Hours</h1>
+    <p class="hero-by">by Surbhi</p>
+    <p class="hero-tagline">Clocked out, happily lost.</p>
+  </div>
+  <img class="hero-img" src="images/radha-krishna.jpeg" alt="Radha Krishna" />
+</section>
+
+<section class="about-section" id="about">
+  <div class="section-eyebrow">About</div>
+  <p>I&#39;m Surbhi, and this is where I come to forget everything else and just make things &#8212; differently, every single time.</p>
+  <p>Happy Hours is not a portfolio of a professional artist. It&#39;s a collection &#8212; of experiments, of free evenings, of &#8220;what if I try this differently&#8221; moments. Just a love for art and craft and the freedom to go as crazy as I want with it.</p>
+  <p>This isn&#39;t perfect and I never wanted it to be. Made in the moments I love most. No rules. No masters. Just happy hours.</p>
+</section>
+
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filterCards('all',this)">All</button>
+  <button class="filter-btn" onclick="filterCards('Madhubani',this)">Madhubani</button>
+  <button class="filter-btn" onclick="filterCards('Handmade Rakhi',this)">Rakhis</button>
+  <button class="filter-btn" onclick="filterCards('Paper Craft',this)">Paper Craft</button>
+  <button class="filter-btn" onclick="filterCards('Bookmark',this)">Bookmarks</button>
+  <button class="filter-btn" onclick="filterCards('Pour Painting',this)">Pour Painting</button>
+  <button class="filter-btn" onclick="filterCards('Handmade Card',this)">Cards</button>
+</div>
+
+<section class="gallery-section" id="gallery">
+  <div class="gallery-grid">
+    <div class="card" data-cat="Madhubani" onclick="openLightbox(0)">
+      <img class="card-img" src="images/madhubani-scenery.jpeg" alt="Scenery, Madhubani Style" loading="lazy" />
+      <div class="card-meta">
+        <div class="card-category">Madhubani</div>
+        <div class="card-title">Scenery, Madhubani Style</div>
+        <div class="card-desc">Every painter starts with a scenery. I just did mine the Madhubani way.</div>
+      </div>
+    </div>
+    <div class="card" data-cat="Madhubani" onclick="openLightbox(1)">
+      <img class="card-img" src="images/madhubani-animals.jpeg" alt="Animals in Medallions" loading="lazy" />
+      <div class="card-meta">
+        <div class="card-category">Madhubani</div>
+        <div class="card-title">Animals in Medallions</div>
+        <div class="card-desc">Went a little more traditional this time. Turns out birds, elephants and fish in circles is a great idea.</div>
+      </div>
+    </div>
+    <div class="card" data-cat="Madhubani" onclick="openLightbox(2)">
+      <img class="card-img" src="images/radha-krishna.jpeg" alt="Radha Krishna" loading="lazy" />
+      <div class="card-meta">
+        <div class="card-category">Madhubani</div>
+        <div class="card-title">Radha Krishna</div>
+        <div class="card-desc">Silk cloth, Madhubani style, zero empty space. This one lives at my parents place now.</div>
+      </div>
+    </div>
+    <div class="card" data-cat="Handmade Rakhi" onclick="openLightbox(3)">
+      <img class="card-img" src="images/rakhi-geometric.jpeg" alt="Geometric Rakhis" loading="lazy" />
+      <div class="card-meta">
+        <div class="card-category">Handmade Rakhi</div>
+        <div class="card-title">Geometric Rakhis</div>
+        <div class="card-desc">Paper, cloth, beads — and somehow one ended up looking like a rocket. Happy accident.</div>
+      </div>
+    </div>
+    <div class="card" data-cat="Handmade Rakhi" onclick="openLightbox(4)">
+      <img class="card-img" src="images/rakhi-wheel.jpeg" alt="Floral Wheel Rakhis" loading="lazy" />
+      <div class="card-meta">
+        <div class="card-category">Handmade Rakhi</div>
+        <div class="card-title">Floral Wheel Rakhis</div>
+        <div class="card-desc">Made from whatever was lying around. Turns out thread and a paper disc go a long way.</div>
+      </div>
+    </div>
+    <div class="card" data-cat="Handmade Rakhi" onclick="openLightbox(5)">
+      <img class="card-img" src="images/rakhi-pompom.jpeg" alt="Pompom Rakhis" loading="lazy" />
+      <div class="card-meta">
+        <div class="card-category">Handmade Rakhi</div>
+        <div class="card-title">Pompom Rakhis</div>
+        <div class="card-desc">Closest to a traditional rakhi — paper base, cloth attached, then folded into a sunburst bloom.</div>
+      </div>
+    </div>
+    <div class="card" data-cat="Handmade Rakhi" onclick="openLightbox(6)">
+      <img class="card-img" src="images/rakhi-lego-bhaibhabhi.jpeg" alt="LEGO Bhai-Bhabhi Rakhi Set" loading="lazy" />
+      <div class="card-meta">
+        <div class="card-category">Handmade Rakhi</div>
+        <div class="card-title">LEGO Bhai-Bhabhi Rakhi Set</div>
+        <div class="card-desc">A rakhi set for the bhai who runs on chai. A few LEGO bricks, a little imagination, and somehow it all made sense.</div>
+      </div>
+    </div>
+    <div class="card" data-cat="Handmade Rakhi" onclick="openLightbox(7)">
+      <img class="card-img" src="images/rakhi-lego-kids.jpeg" alt="LEGO Kids Rakhi Set" loading="lazy" />
+      <div class="card-meta">
+        <div class="card-category">Handmade Rakhi</div>
+        <div class="card-title">LEGO Kids Rakhi Set</div>
+        <div class="card-desc">One brick at a time, one idea at a time — ended up with a crab and a cartoon character. Made for kids who deserve a rakhi as fun as they are.</div>
+      </div>
+    </div>
+    <div class="card" data-cat="Paper Craft" onclick="openLightbox(8)">
+      <img class="card-img" src="images/paper-flowers.jpeg" alt="Paper Pompom Flowers" loading="lazy" />
+      <div class="card-meta">
+        <div class="card-category">Paper Craft</div>
+        <div class="card-title">Paper Pompom Flowers</div>
+        <div class="card-desc">Was bored, had colourful paper, no plan. These happened.</div>
+      </div>
+    </div>
+    <div class="card" data-cat="Bookmark" onclick="openLightbox(9)">
+      <img class="card-img" src="images/bookmark-popart.jpeg" alt="Pop Art Thread Bookmark" loading="lazy" />
+      <div class="card-meta">
+        <div class="card-category">Bookmark</div>
+        <div class="card-title">Pop Art Thread Bookmark</div>
+        <div class="card-desc">Started as a bookmark. Might be wall art. Has not decided yet.</div>
+      </div>
+    </div>
+    <div class="card" data-cat="Bookmark" onclick="openLightbox(10)">
+      <img class="card-img" src="images/bookmark-robot.jpeg" alt="Geometric Robot Bookmark" loading="lazy" />
+      <div class="card-meta">
+        <div class="card-category">Bookmark</div>
+        <div class="card-title">Geometric Robot Bookmark</div>
+        <div class="card-desc">Drew lines, spread them with glue, cut the paper, rearranged. A robot appeared. Kept it — it suited the person it was going to.</div>
+      </div>
+    </div>
+    <div class="card" data-cat="Pour Painting" onclick="openLightbox(11)">
+      <img class="card-img" src="images/pour-painting.jpeg" alt="Ocean Pour Painting" loading="lazy" />
+      <div class="card-meta">
+        <div class="card-category">Pour Painting</div>
+        <div class="card-title">Ocean Pour Painting</div>
+        <div class="card-desc">I poured the paint. The paint did the rest.</div>
+      </div>
+    </div>
+    <div class="card" data-cat="Handmade Card" onclick="openLightbox(12)">
+      <img class="card-img" src="images/graduation-card.jpeg" alt="Graduation Pop-up Card" loading="lazy" />
+      <div class="card-meta">
+        <div class="card-category">Handmade Card</div>
+        <div class="card-title">Graduation Pop-up Card</div>
+        <div class="card-desc">Cap, tassel, scroll, paper planes — all inside one card. Because some days deserve more than a flat piece of paper.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact-section" id="contact">
+  <h2>Say Hello</h2>
+  <p>Want to talk art, craft or just say hi?</p>
+  <a href="mailto:you@email.com" class="btn">Get in touch</a>
+</section>
+
+<footer>
+  <span>Happy Hours</span>
+  <span>by Surbhi &middot; made with love</span>
+</footer>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lb-inner" onclick="event.stopPropagation()">
+    <div class="lb-img-wrap"><img id="lbImg" src="" alt="" /></div>
+    <div class="lb-info">
+      <div class="lb-cat" id="lbCat"></div>
+      <div class="lb-title" id="lbTitle"></div>
+    </div>
+  </div>
+  <button class="lb-close" onclick="closeLightbox()">&#215;</button>
+</div>
+
+<script>
+  const IMGS   = [
+  "images/madhubani-scenery.jpeg",
+  "images/madhubani-animals.jpeg",
+  "images/radha-krishna.jpeg",
+  "images/rakhi-geometric.jpeg",
+  "images/rakhi-wheel.jpeg",
+  "images/rakhi-pompom.jpeg",
+  "images/rakhi-lego-bhaibhabhi.jpeg",
+  "images/rakhi-lego-kids.jpeg",
+  "images/paper-flowers.jpeg",
+  "images/bookmark-popart.jpeg",
+  "images/bookmark-robot.jpeg",
+  "images/pour-painting.jpeg",
+  "images/graduation-card.jpeg",
+];
+  const TITLES = [
+  "Scenery, Madhubani Style",
+  "Animals in Medallions",
+  "Radha Krishna",
+  "Geometric Rakhis",
+  "Floral Wheel Rakhis",
+  "Pompom Rakhis",
+  "LEGO Bhai-Bhabhi Rakhi Set",
+  "LEGO Kids Rakhi Set",
+  "Paper Pompom Flowers",
+  "Pop Art Thread Bookmark",
+  "Geometric Robot Bookmark",
+  "Ocean Pour Painting",
+  "Graduation Pop-up Card",
+];
+  const CATS   = [
+  "Madhubani",
+  "Madhubani",
+  "Madhubani",
+  "Handmade Rakhi",
+  "Handmade Rakhi",
+  "Handmade Rakhi",
+  "Handmade Rakhi",
+  "Handmade Rakhi",
+  "Paper Craft",
+  "Bookmark",
+  "Bookmark",
+  "Pour Painting",
+  "Handmade Card",
+];
+
+  function openLightbox(i) {
+    document.getElementById('lbImg').src = IMGS[i];
+    document.getElementById('lbTitle').textContent = TITLES[i];
+    document.getElementById('lbCat').textContent = CATS[i];
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if(e.key==='Escape') closeLightbox(); });
+
+  function filterCards(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.card').forEach(card => {
+      card.classList.toggle('hidden', cat !== 'all' && card.dataset.cat !== cat);
+    });
+  }
+</script>
+</body>
+</html>
